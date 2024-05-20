@@ -4,14 +4,14 @@
 
 template<valid_numeric T>
 class MatrixTemplate {
-private:
+protected:
 	unsigned int m;
 	unsigned int n;
 	T** data;
 
 public:
 	// Конструктор и деструктор
-	MatrixTemplate<T>(unsigned int rows, unsigned int cols);
+	MatrixTemplate(unsigned int rows, unsigned int cols);
 	~MatrixTemplate();
 	// Оператор обращения по индексу
 	T* operator[](unsigned int i);
