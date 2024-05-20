@@ -1,11 +1,9 @@
 ﻿#include <iostream>
 #include <concepts>
 #include <type_traits>
+#include "ExtraConcepts.h"
 
-template<typename T>
-concept valid_numeric = std::is_integral<T>::value || std::is_floating_point<T>::value;
-
-template<valid_numeric T>
+template<valid_second_max T>
 int findSecondMaxIndex(T *arr, unsigned int size) {
     T maxElement = arr[0];
     //find max index
@@ -18,11 +16,12 @@ int findSecondMaxIndex(T *arr, unsigned int size) {
     int resultIndex = 0;
     // find second max
     for (int i = 0; i < size; i++) {
-        if (arr[i] > maxElement) {
+        if (arr[i] > secondMax && arr[i] != maxElement) {
             resultIndex = i;
             secondMax = arr[i];
         }
     }
+    return resultIndex;
 }
 
 int main()
