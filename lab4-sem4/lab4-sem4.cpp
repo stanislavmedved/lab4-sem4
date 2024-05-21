@@ -1,9 +1,12 @@
 ﻿#include <iostream>
-#include <concepts>
-#include <type_traits>
 #include <vector>
+#include <random>
 #include "ExtraConcepts.h"
 #include "MatrixTemplate.h"
+#include "Vector.h"
+// это отвратительно
+#include "MatrixTemplate.cpp"
+#include "Vector.cpp"
 
 template<valid_second_max T>
 // второй максимум
@@ -34,7 +37,7 @@ void printVector(std::vector<T>& arr) {
 }
 template<valid_second_max T>
 void testSecondMaxWithVector(std::vector<T>& arr) {
-    std::cout << "Индекс второго максимума для массива "; printVector(arr); std::cout << ": " << findSecondMaxIndex(arr.data(), arr.size());
+    std::cout << "Индекс второго максимума для массива "; printVector(arr); std::cout << "\n" << findSecondMaxIndex(arr.data(), arr.size()) << '\n';
 }
 void secondMaxUnitTest() {
     std::vector<int> testInts = { 1,2,3,4,5 };
@@ -60,15 +63,15 @@ void testTwoMatrices(MatrixTemplate<T>& matrix1, MatrixTemplate<T>& matrix2) {
     std::cout << "Матрица 2:\n" << matrix2 << std::endl;
 
     // Сложение матриц
-    Matrix resultAdd = matrix1 + matrix2;
+    MatrixTemplate<T> resultAdd = matrix1 + matrix2;
     std::cout << "Сумма матриц:\n" << resultAdd << std::endl;
-
+    
     // Вычитание матриц
-    Matrix resultSubtract = matrix1 - matrix2;
+    MatrixTemplate<T> resultSubtract = matrix1 - matrix2;
     std::cout << "Разность матриц:\n" << resultSubtract << std::endl;
-
+    
     // Умножение матриц
-    Matrix resultMultiply = matrix1 * matrix2;
+    MatrixTemplate<T> resultMultiply = matrix1 * matrix2;
     std::cout << "Произведение матриц:\n" << resultMultiply << std::endl;
 
     // Проверка на равенство и неравенство матриц
@@ -91,17 +94,37 @@ void matrixTemplateUnitTest() {
     MatrixTemplate<int> intMatrix1 = MatrixTemplate<int>(3, 3);
     MatrixTemplate<int> intMatrix2 = MatrixTemplate<int>(3, 3);
     testTwoMatrices(intMatrix1, intMatrix2);
-    MatrixTemplate<float> floatMatrix1 = MatrixTemplate<float>(3, 3);
-    MatrixTemplate<float> floatMatrix2 = MatrixTemplate<float>(3, 3);
+    MatrixTemplate<float> floatMatrix1(3, 3);
+    MatrixTemplate<float> floatMatrix2(3, 3);
     testTwoMatrices(floatMatrix1, floatMatrix2);
-    MatrixTemplate<double> doubleMatrix1 = MatrixTemplate<double>(3, 3);
-    MatrixTemplate<double> doubleMatrix2 = MatrixTemplate<double>(3, 3);
+    MatrixTemplate<double> doubleMatrix1(3, 3);
+    MatrixTemplate<double> doubleMatrix2(3, 3);
     testTwoMatrices(doubleMatrix1, doubleMatrix2);
 }
+// вектора
+template<valid_numeric T>
+void testTwoVectors(Vector<T>& vector1, Vector<T>& vector2) {
+    vector1.fillRandom();
+    vector2.fillRandom();
 
+    std::cout << "Вектор 1: " << vector1 << std::endl;
+    std::cout << "Вектор 2: " << vector2 << std::endl;
+
+    Vector<T> crossProduct = vector1.crossProduct(vector2);
+    std::cout << "Вектор 1 x Вектор 2 = " << crossProduct << std::endl;
+    double dotProduct = vector1.dotProduct(vector2);
+    std::cout << "Вектор 1 * Вектор 2 = " << dotProduct << std::endl;
+}
+void vectorUnitTest() {
+    Vector<int> intVector1 = Vector<int>(3);
+    Vector<int> intVector2 = Vector<int>(3);
+    testTwoVectors(intVector1, intVector2);
+}
 int main()
 {
     setlocale(LC_ALL, "rus");
+    srand(static_cast <unsigned> (time(0)));
     secondMaxUnitTest();
     matrixTemplateUnitTest();
+    vectorUnitTest();
 }

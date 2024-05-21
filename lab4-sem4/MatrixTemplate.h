@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include "ExtraConcepts.h"
 
 template<valid_numeric T>
@@ -8,7 +9,6 @@ protected:
 	unsigned int m;
 	unsigned int n;
 	T** data;
-
 public:
 	// Конструктор и деструктор
 	MatrixTemplate(unsigned int rows, unsigned int cols);
@@ -18,7 +18,7 @@ public:
 	// Метод заполнения случайными числами
 	void fillRandom();
 	// Оператор <<
-	friend std::ostream& operator<<(std::ostream& os, const MatrixTemplate<T>& matrix);
+	friend std::ostream& operator<< <>(std::ostream& os, const MatrixTemplate<T>& matrix);
 	// Операторы сложения/вычитания/умножения
 	MatrixTemplate<T>& operator+=(const MatrixTemplate<T>& other);
 	MatrixTemplate<T> operator+(const   MatrixTemplate<T>& other);

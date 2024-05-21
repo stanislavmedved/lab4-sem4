@@ -1,8 +1,9 @@
-﻿#include "MatrixTemplate.h"
+﻿#pragma once
+#include "MatrixTemplate.h"
 #include <random>
 
 template<valid_numeric T>
-MatrixTemplate<T>::MatrixTemplate(unsigned int rows, unsigned int cols)
+MatrixTemplate<T>::MatrixTemplate(unsigned int rows, unsigned int cols): m{rows}, n{cols}
 {
 	data = new T* [m];
 	for (unsigned int i = 0; i < m; ++i) {
@@ -28,46 +29,15 @@ T* MatrixTemplate<T>::operator[](unsigned int i)
 template<valid_numeric T>
 void MatrixTemplate<T>::fillRandom()
 {
-	/*
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⠴⠒⠒⠛⠛⠓⠚⣻⣿⣗⣦⣤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡠⠊⣩⣴⣶⣶⣶⣶⣶⣶⣶⣿⣿⣿⣷⣌⡙⠢⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠞⣰⣾⣿⠟⠉⠉⠉⠉⠙⠟⣿⣿⣿⣿⣿⣿⡟⢦⠹⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⢋⣴⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠈⠋⢿⣿⣿⣿⡃⠀⡀⠙⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⢏⣼⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣿⣿⣧⠀⢻⣆⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡏⣼⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⠀⣶⠈⢻⣿⡄⠸⡟⢻⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⠙⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⡆⢸⣿⡇⠀⡁⠈⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⠀⠀⣀⡀⠀⠀⠀⠀⠃⠀⠀⠀⠘⠙⢃⣾⣿⠃⠀⡇⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣟⣿⣿⡇⢠⡾⢻⡿⠿⢷⣦⣤⠁⣷⣄⣤⣾⠿⠿⢿⣿⣄⠀⣯⣀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⠃⠈⠡⠾⣿⣿⣿⡿⠁⠀⣼⣿⣿⡿⠛⢶⣿⣿⣿⠀⠹⢿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣿⣿⡇⠀⠀⠀⠀⠈⡹⠏⠀⠀⢻⣿⣿⣷⠀⠀⠙⠻⣿⡇⣠⡼⣟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣿⣿⣿⣿⠀⠀⠀⠀⠈⠀⠀⠀⠀⣸⣿⣿⣿⣧⠀⠀⠀⣿⠀⢿⡻⢿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⠀⠀⣼⣿⠀⠀⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢻⡿⡄⠀⠀⠀⠀⠀⠀⠉⢳⣶⣿⣿⣿⣯⡀⢸⣧⣼⡀⠀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⢀⠀⠀⠀⡀⠀⠀⠀⢸⡅⢘⣟⣽⣿⣿⣿⣿⣿⠤⣼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢻⣮⡀⡀⠀⠙⠛⠛⠛⠛⠿⠻⣿⣿⣿⣿⣻⣧⡿⢿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣷⠀⠀⠀⠀⠀⠐⠛⠃⠀⠛⣿⣿⣿⣿⣿⣷⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣬⣿⣿⣷⣴⣦⠀⠀⠀⠀⣀⡀⣴⣿⣿⣿⣿⣿⣿⢸⣟⢢⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-	⠀⠀⠀⠀⠀⢀⣠⣤⣴⣶⣶⣿⣿⣿⣿⣿⣿⠻⣿⡷⢷⣦⠴⡾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣸⣿⠀⢲⣾⡿⠦⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀
-	⢀⣠⣴⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠈⠛⢦⣀⠀⠐⠛⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣷⣼⣿⣿⣷⣶⣾⣯⣄⠀⠀⠀⠀⠀⠀
-	⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡀⠀⠀⠀⠉⠳⣦⣀⣀⣾⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣤⡀⠀⠀
-	⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡀⠀⠀⠀⠀⣨⡿⢟⣵⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷
-	⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⠀⠀⢀⣼⣿⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-	⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⣴⣿⣿⢿⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-	⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣼⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
-	*/
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dis(0, 9);
-
 	for (unsigned int i = 0; i < m; ++i) {
 		for (unsigned int j = 0; j < n; ++j) {
-			data[i][j] = dis(gen); // Генерация случайного числа от 0 до 9
+			data[i][j] = static_cast <T> (rand()) / static_cast <T> (RAND_MAX/9); // Генерация случайного числа от 0 до 9
 		}
 	}
 }
 
 template<valid_numeric T>
-MatrixTemplate<T>& MatrixTemplate<T>::operator+=(const MatrixTemplate<T>& other)
+MatrixTemplate<T>& MatrixTemplate<T>::operator+=(const MatrixTemplate<T>& operand)
 {
 	if (m != operand.m || n != operand.n) {
 		throw std::invalid_argument("Размеры матриц не совпадают!");
@@ -83,13 +53,13 @@ MatrixTemplate<T>& MatrixTemplate<T>::operator+=(const MatrixTemplate<T>& other)
 }
 
 template<valid_numeric T>
-MatrixTemplate<T> MatrixTemplate<T>::operator+(const MatrixTemplate<T>& other)
+MatrixTemplate<T> MatrixTemplate<T>::operator+(const MatrixTemplate<T>& operand)
 {
 	if (m != operand.m || n != operand.n) {
 		throw std::invalid_argument("Размеры матриц не совпадают!");
 	}
 
-	Matrix result(m, n); // Создаем новую матрицу для хранения результата
+	MatrixTemplate<T> result(m, n); // Создаем новую матрицу для хранения результата
 
 	for (unsigned int i = 0; i < m; ++i) {
 		for (unsigned int j = 0; j < n; ++j) {
@@ -101,7 +71,7 @@ MatrixTemplate<T> MatrixTemplate<T>::operator+(const MatrixTemplate<T>& other)
 }
 
 template<valid_numeric T>
-MatrixTemplate<T>& MatrixTemplate<T>::operator-=(const MatrixTemplate<T>& other)
+MatrixTemplate<T>& MatrixTemplate<T>::operator-=(const MatrixTemplate<T>& operand)
 {
 	if (m != operand.m || n != operand.n) {
 		throw std::invalid_argument("Размеры матриц не совпадают для вычитания!");
@@ -117,13 +87,13 @@ MatrixTemplate<T>& MatrixTemplate<T>::operator-=(const MatrixTemplate<T>& other)
 }
 
 template<valid_numeric T>
-MatrixTemplate<T> MatrixTemplate<T>::operator-(const MatrixTemplate<T>& other)
+MatrixTemplate<T> MatrixTemplate<T>::operator-(const MatrixTemplate<T>& operand)
 {
 	if (m != operand.m || n != operand.n) {
 		throw std::invalid_argument("Размеры матриц не совпадают для вычитания!");
 	}
 
-	Matrix result(m, n); // Создаем новую матрицу для хранения результата
+	MatrixTemplate<T> result(m, n); // Создаем новую матрицу для хранения результата
 
 	for (unsigned int i = 0; i < m; ++i) {
 		for (unsigned int j = 0; j < n; ++j) {
@@ -135,13 +105,13 @@ MatrixTemplate<T> MatrixTemplate<T>::operator-(const MatrixTemplate<T>& other)
 }
 
 template<valid_numeric T>
-MatrixTemplate<T> MatrixTemplate<T>::operator*(const MatrixTemplate<T>& other)
+MatrixTemplate<T> MatrixTemplate<T>::operator*(const MatrixTemplate<T>& operand)
 {
 	if (n != operand.m) {
 		throw std::invalid_argument("Количество столбцов первой матрицы не совпадает с количеством строк второй матрицы!");
 	}
 
-	Matrix result(m, operand.n); // Создаем новую матрицу для хранения результата
+	MatrixTemplate<T> result(m, operand.n); // Создаем новую матрицу для хранения результата
 
 	for (unsigned int i = 0; i < m; ++i) {
 		for (unsigned int j = 0; j < operand.n; ++j) {
@@ -156,9 +126,9 @@ MatrixTemplate<T> MatrixTemplate<T>::operator*(const MatrixTemplate<T>& other)
 }
 
 template<valid_numeric T>
-bool MatrixTemplate<T>::operator!=(const MatrixTemplate<T>& other) const
+bool MatrixTemplate<T>::operator!=(const MatrixTemplate<T>& operand) const
 {
-	return !(*this == other);
+	return !(*this == operand);
 }
 
 template<valid_numeric T>

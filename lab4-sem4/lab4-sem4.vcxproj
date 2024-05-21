@@ -130,10 +130,12 @@
   <ItemGroup>
     <ClCompile Include="lab4-sem4.cpp" />
     <ClCompile Include="MatrixTemplate.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MatrixTemplate.h" />
     <ClInclude Include="ExtraConcepts.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
