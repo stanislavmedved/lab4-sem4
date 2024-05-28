@@ -123,6 +123,8 @@ void vectorUnitTest() {
 int main()
 {
     setlocale(LC_ALL, "rus");
+    //copyright by Aiacaxapa & stanislavmedved
+    system("start copyright.mp4");
     srand(static_cast <unsigned> (time(0)));
     secondMaxUnitTest();
     matrixTemplateUnitTest();
